@@ -1,67 +1,12 @@
-FROM node:10.16.0
-ARG codeServerVersion=docker
-ARG vscodeVersion
-ARG githubToken
+FROM codercom/code-server:v2
 
-# Install VS Code's deps. These are the only two it seems we need.
-RUN apt-get update && apt-get install -y \
-	libxkbfile-dev \
-	libsecret-1-dev
+RUN export DEBIAN_FRONTEND=noninteractive \
+    && sed -i 's/archive.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list \
+    && sed -i 's/security.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list \
+    && apt-get update && apt-get upgrade -y && apt-get autoremove -y \
+    && apt-get install apt-utils tzdata -y \
+    && wget https://raw.githubusercontent.com/ZerounNet/Dockerfiles/master/Quanter-Code/setup.sh \
+    && chmod u+x setup.sh && ./setup.sh && rm -rfv setup.sh \
+    && apt-get clean -y && rm /tmp/* -rf && rm /root/.cache/ -rf && rm /var/lib/apt/lists/* -rf
 
-# Ensure latest yarn.
-RUN npm install -g yarn@1.13
-
-WORKDIR /src
-COPY . .
-
-RUN yarn \
-	&& MINIFY=true GITHUB_TOKEN="${githubToken}" yarn build "${vscodeVersion}" "${codeServerVersion}" \
-	&& yarn binary "${vscodeVersion}" "${codeServerVersion}" \
-	&& mv "/src/binaries/code-server${codeServerVersion}-vsc${vscodeVersion}-linux-x86_64" /src/binaries/code-server \
-	&& rm -r /src/build \
-	&& rm -r /src/source
-
-# We deploy with ubuntu so that devs have a familiar environment.
-FROM ubuntu:18.04
-
-RUN apt-get update && apt-get install -y \
-	openssl \
-	net-tools \
-	git \
-	locales \
-	sudo \
-	dumb-init \
-	vim \
-	curl \
-	wget \
-  && rm -rf /var/lib/apt/lists/*
-
-RUN locale-gen en_US.UTF-8
-# We cannot use update-locale because docker will not use the env variables
-# configured in /etc/default/locale so we need to set it manually.
-ENV LC_ALL=en_US.UTF-8 \
-	SHELL=/bin/bash
-
-RUN adduser --gecos '' --disabled-password coder && \
-	echo "coder ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/nopasswd &&\
-    mkdir /home/coder/.config/matplotlib/ -p &&\
-    cp /root/.config/matplotlib/matplotlibrc /home/coder/.config/matplotlib/  &&\
-    chown coder:coder /home/coder/.config/matplotlib/matplotlibrc &&\
-    echo 'export PATH="/usr/local/conda/bin:$PATH"' >> /home/coder/.bashrc
-
-USER coder
-# We create first instead of just using WORKDIR as when WORKDIR creates, the
-# user is root.
-RUN mkdir -p /home/coder/project
-# To avoid EACCES issues on f.ex Crostini (ChromeOS)
-RUN mkdir -p /home/coder/.local/share/code-server
-
-WORKDIR /home/coder/project
-
-# This ensures we have a volume mounted even if the user forgot to do bind
-# mount. So that they do not lose their data if they delete the container.
-VOLUME [ "/home/coder/project" ]
-
-COPY --from=0 /src/binaries/code-server /usr/local/bin/code-server
-
-ENTRYPOINT ["dumb-init", "code-server", "--host", "0.0.0.0", "--port", "8888"]
+CMD ["bash", "~/entrypoint.sh"]
