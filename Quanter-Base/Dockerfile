@@ -7,6 +7,6 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     && apt-get install apt-utils tzdata wget -y \
     && wget https://raw.githubusercontent.com/ZerounNet/Dockerfiles/master/Quanter-Base/setup.sh \
     && chmod u+x setup.sh && ./setup.sh && rm -rfv setup.sh \
-    && apt-get clean -y && rm /tmp/* -rf && rm /root/.cache/ -rf
+    && apt-get clean -y && rm /tmp/* -rf && rm /root/.cache/ -rf && rm /var/lib/apt/lists/* -rf
 
 CMD ["bash", "/entrypoint.sh"]
