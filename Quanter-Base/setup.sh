@@ -51,6 +51,19 @@ axes.unicode_minus  : False
 EOF
 ln -s /usr/share/fonts/truetype/wqy/wqy-microhei.ttc /usr/local/conda/lib/python3.6/site-packages/matplotlib/mpl-data/fonts/ttf/
 
+mkdir ~/.jupyter/
+cat > ~/.jupyter/jupyter_notebook_config.py <<EOF
+c.NotebookApp.ip = '127.0.0.1'
+c.NotebookApp.port = '8888'
+c.NotebookApp.notebook_dir = '/home'
+c.NotebookApp.open_browser = False
+c.MultiKernelManager.default_kernel_name = 'python3'
+c.NotebookApp.allow_credentials = True
+c.NotebookApp.allow_origin = '*'
+c.NotebookApp.allow_remote_access = True
+c.NotebookApp.tornado_settings = { 'headers': { 'Content-Security-Policy': "" }}
+EOF
+
 cat > /entrypoint.sh <<EOF
 PATH="/usr/local/conda/bin:\$PATH"
 pip install -U quantaxis qastrategy qifiaccount tqsdk tushare pytdx
