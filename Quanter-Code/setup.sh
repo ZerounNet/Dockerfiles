@@ -15,7 +15,7 @@ chmod u+x Miniconda3-latest-Linux-x86_64.sh
 ./Miniconda3-latest-Linux-x86_64.sh -b -p ~/.conda
 rm ./Miniconda3-latest-Linux-x86_64.sh
 ~/.conda/bin/conda init bash
-source ~/.bashrc
+#source ~/.bashrc
 
 cat > ~/.condarc <<EOF
 channels:
@@ -34,13 +34,13 @@ custom_channels:
   simpleitk: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
 EOF
 
-conda install -n base python==3.6.9 -y
-conda update -n base conda -y
-conda install -n base  jupyter tensorflow==1.15.0 tensorboard=1.15.0 keras py-xgboost  marshmallow==2.18.0 matplotlib pandas==0.24.2 tzlocal=1.5.1 numpy scikit-learn -y
+~/.conda/bin/conda install -n base python==3.6.9 -y
+~/.conda/bin/conda update -n base conda -y
+~/.conda/bin/conda install -n base  jupyter tensorflow==1.15.0 tensorboard=1.15.0 keras py-xgboost  marshmallow==2.18.0 matplotlib pandas==0.24.2 tzlocal=1.5.1 numpy scikit-learn fastcache -y
 
-pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
-pip install TA-LIB pyecharts==0.5.11
-pip install quantaxis qastrategy qifiaccount tqsdk tushare pytdx>=1.72
+~/.conda/bin/pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+~/.conda/bin/pip install TA-LIB pyecharts==0.5.11 tushare
+~/.conda/bin/pip install quantaxis qastrategy qifiaccount tqsdk pytdx>=1.72
 
 mkdir ~/.config/matplotlib/ -p
 cat > ~/.config/matplotlib/matplotlibrc <<EOF
@@ -56,4 +56,14 @@ dumb-init code-server --host 0.0.0.0 --port 8888
 EOF
 chmod u+x ~/entrypoint.sh
 
-conda clean -a -y
+mkdir ~/.quantaxis/setting -p
+cat > ~/.quantaxis/setting/config.ini <<EOF
+[MONGODB]
+uri = mongodb://mgdb:27017
+
+[LOG]
+path = '~/.quantaxis/log'
+EOF
+
+~/.conda/bin/conda clean -a -y
+
