@@ -53,7 +53,7 @@ ln -s /usr/share/fonts/truetype/wqy/wqy-microhei.ttc /usr/local/conda/lib/python
 
 cat > ~/.jupyter/jupyter_notebook_config.py <<EOF
 c.NotebookApp.ip = '127.0.0.1'
-c.NotebookApp.port = '8888'
+c.NotebookApp.port = 8888
 c.NotebookApp.notebook_dir = '/home'
 c.NotebookApp.open_browser = False
 c.MultiKernelManager.default_kernel_name = 'python3'
