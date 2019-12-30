@@ -48,10 +48,10 @@ font.family         : WenQuanYi Micro Hei, sans-serif
 font.sans-serif     : WenQuanYi Micro Hei, DejaVu Sans, Bitstream Vera Sans, Computer Modern Sans Serif, Lucida Grande, Verdana, Geneva, Lucid, Arial, Helvetica, Avant Garde, sans-serif
 axes.unicode_minus  : False
 EOF
-ln -s /usr/share/fonts/truetype/wqy/wqy-microhei.ttc /usr/local/conda/lib/python3.6/site-packages/matplotlib/mpl-data/fonts/ttf/
+ln -s /usr/share/fonts/truetype/wqy/wqy-microhei.ttc ~/.conda/lib/python3.6/site-packages/matplotlib/mpl-data/fonts/ttf/
 
 cat > ~/entrypoint.sh <<EOF
-pip install -U quantaxis qastrategy qifiaccount tqsdk tushare pytdx
+~/.conda/bin/pip install -U quantaxis qastrategy qifiaccount tqsdk tushare pytdx
 dumb-init code-server --host 0.0.0.0 --port 8888
 EOF
 chmod u+x ~/entrypoint.sh
