@@ -41,7 +41,7 @@ conda install -n base  tensorflow-gpu==1.15.0 tensorborad=1.15.0 keras py-xgboos
 
 pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 pip install TA-LIB pyecharts==0.5.11
-pip install quantaxis qastrategy qifiaccount tqsdk tushare pytdx
+pip install quantaxis qastrategy qifiaccount tqsdk tushare pytdx>=1.72
 
 mkdir ~/.config/matplotlib/ -p
 cat > ~/.config/matplotlib/matplotlibrc <<EOF
