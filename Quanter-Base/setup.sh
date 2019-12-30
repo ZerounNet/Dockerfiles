@@ -10,7 +10,7 @@ cd ..
 rm -rf ta-lib
 rm ta-lib-0.4.0-src.tar.gz
 
-mkdir /root/.conda
+mkdir ~/.conda
 wget https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-Linux-x86_64.sh
 chmod u+x Miniconda3-latest-Linux-x86_64.sh
 ./Miniconda3-latest-Linux-x86_64.sh -b -p /usr/local/conda
@@ -51,7 +51,6 @@ axes.unicode_minus  : False
 EOF
 ln -s /usr/share/fonts/truetype/wqy/wqy-microhei.ttc /usr/local/conda/lib/python3.6/site-packages/matplotlib/mpl-data/fonts/ttf/
 
-mkdir ~/.jupyter/
 cat > ~/.jupyter/jupyter_notebook_config.py <<EOF
 c.NotebookApp.ip = '127.0.0.1'
 c.NotebookApp.port = '8888'
@@ -67,7 +66,7 @@ EOF
 cat > /entrypoint.sh <<EOF
 PATH="/usr/local/conda/bin:\$PATH"
 pip install -U quantaxis qastrategy qifiaccount tqsdk tushare pytdx
-jupyter-lab --allow-root
+jupyter lab --allow-root
 EOF
 chmod u+x /entrypoint.sh
 
