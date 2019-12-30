@@ -37,7 +37,7 @@ EOF
 
 conda install -n base python==3.6.9 -y
 conda update -n base conda -y
-conda install -n base  tensorflow-gpu==1.15.0 tensorborad=1.15.0 keras py-xgboost  marshmallow==2.18.0 matplotlib pandas==0.24.2 tzlocal=1.5.1 numpy scikit-learn -y
+conda install -n base  tensorflow==1.15.0 tensorboard=1.15.0 keras py-xgboost  marshmallow==2.18.0 matplotlib pandas==0.24.2 tzlocal=1.5.1 numpy scikit-learn -y
 
 pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 pip install TA-LIB pyecharts==0.5.11
