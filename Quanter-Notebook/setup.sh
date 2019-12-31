@@ -13,9 +13,6 @@ chmod o+x ~/entrypoint.sh
 
 mkdir ~/.quantaxis/setting -p
 cat > ~/.quantaxis/setting/config.ini <<EOF
-[MONGODB]
-uri = mongodb://mgdb:27017
-
 [LOG]
 path = '~/.quantaxis/log'
 EOF
