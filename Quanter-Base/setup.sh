@@ -6,7 +6,7 @@ tar xvf ta-lib-0.4.0-src.tar.gz
 cd ta-lib
 ./configure --prefix=/usr
 make
-sudo make install
+make install
 cd ..
 rm -rf ta-lib
 rm ta-lib-0.4.0-src.tar.gz
@@ -32,7 +32,6 @@ custom_channels:
   pytorch: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
   simpleitk: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
 EOF
-
 ln -s /usr/local/conda/.condarc ~/
 
 /usr/local/conda/bin/conda install -n base python==3.6.9 -y
