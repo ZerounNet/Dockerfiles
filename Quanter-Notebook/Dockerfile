@@ -25,7 +25,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
         wget \
     && apt-get upgrade -y && apt-get autoremove -y \
     && apt-get clean -y && rm /var/lib/apt/lists/* -rf && rm /tmp/* -rf \
-    && TZ=Asia/Shanghai && LANG=zh_CN.UTF-8 && locale-gen zh_CN.UTF-8 && SHELL=/bin/bash \
+    && TZ=Asia/Shanghai && locale-gen zh_CN.UTF-8 \
     && adduser --gecos '' --disabled-password coder \
     && echo "coder ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/nopasswd \
     && ln -s /usr/local/conda/bin/python /usr/local/bin/ \
@@ -35,6 +35,11 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     && pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple \
     && ln -s /usr/share/fonts/truetype/wqy/wqy-microhei.ttc /usr/local/conda/lib/python3.6/site-packages/matplotlib/mpl-data/fonts/ttf/
 
+ENV TZ=Asia/Shanghai \
+    LC_ALL=zh_CN.UTF-8 \
+    LANG=zh_CN.UTF-8 \
+	SHELL=/bin/bash 
+    
 USER coder
 
 COPY setup.sh /home/coder
