@@ -36,7 +36,7 @@ ln -s /usr/local/conda/.condarc ~/
 
 /usr/local/conda/bin/conda install -n base python==3.6.9 -y
 /usr/local/conda/bin/conda update -n base conda -y
-/usr/local/conda/bin/conda install -n base  jupyter tensorflow==1.15.0 tensorboard=1.15.0 keras py-xgboost  marshmallow==2.18.0 matplotlib pandas==0.24.2 tzlocal=1.5.1 numpy scikit-learn fastcache -y
+/usr/local/conda/bin/conda install -n base  jupyterlab tensorflow==1.15.0 tensorboard=1.15.0 keras py-xgboost  marshmallow==2.18.0 matplotlib pandas==0.24.2 tzlocal=1.5.1 numpy scikit-learn fastcache -y
 
 /usr/local/conda/bin/pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 /usr/local/conda/bin/pip install TA-LIB pyecharts==0.5.11 tushare
