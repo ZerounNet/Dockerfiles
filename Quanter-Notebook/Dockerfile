@@ -38,7 +38,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 ENV TZ=Asia/Shanghai \
     LC_ALL=zh_CN.UTF-8 \
     LANG=zh_CN.UTF-8 \
-	SHELL=/bin/bash 
+    SHELL=/bin/bash 
     
 USER coder
 
