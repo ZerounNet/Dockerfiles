@@ -1,16 +1,16 @@
-FROM codercom/code-server:v2
-
 FROM zerounnet/quanter-base:latest
 
 RUN mkdir /tmp/usr/include /tmp/usr/lib -p \
     && cp -rv /usr/include/ta-lib /tmp/usr/include \
     && cp -rv /usr/lib/libta_lib* /tmp/usr/lib
 
+FROM codercom/code-server:v2
+
 FROM ubuntu:18.04
 
-COPY --from=0 /usr/local/bin/code-server /usr/local/bin/code-server
-COPY --from=1 /tmp/usr /usr
-COPY --from=1 /usr/local/conda /usr/local/conda
+COPY --from=0 /tmp/usr /usr
+COPY --from=0 /usr/local/conda /usr/local/conda
+COPY --from=1 /usr/local/bin/code-server /usr/local/bin/code-server
 
 RUN export DEBIAN_FRONTEND=noninteractive \
     && sed -i 's/archive.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list \
