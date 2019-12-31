@@ -1,16 +1,53 @@
 FROM codercom/code-server:v2
 
-COPY setup.sh ./
+FROM zerounnet/quanter-base:latest
 
-RUN  sudo sed -i 's/archive.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list \
-    && sudo sed -i 's/security.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list \
-    && sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get autoremove -y \
-    && sudo  apt-get install apt-utils -y \
-    && sudo chown coder:coder setup.sh \
-    && chmod u+x setup.sh && ./setup.sh && rm -rfv setup.sh \
-    && mkdir ~/.vscode \
-    && sudo apt-get clean -y && sudo rm /tmp/* -rf && sudo rm ~/.cache/ -rf && sudo rm /var/lib/apt/lists/* -rf
+RUN mkdir /tmp/usr/include /tmp/usr/lib -p \
+    && cp -rv /usr/include/ta-lib /tmp/usr/include \
+    && cp -rv /usr/lib/libta_lib* /tmp/usr/lib
 
-COPY ./extensions ~/.vscode/
+FROM ubuntu:18.04
 
-ENTRYPOINT ["bash", "/home/coder/entrypoint.sh"]
+COPY --from=0 /usr/local/bin/code-server /usr/local/bin/code-server
+COPY --from=1 /tmp/usr /usr
+COPY --from=1 /usr/local/conda /usr/local/conda
+
+RUN export DEBIAN_FRONTEND=noninteractive \
+    && sed -i 's/archive.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list \
+    && sed -i 's/security.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list \
+    && apt-get update && apt-get install apt-utils tzdata fonts-wqy-microhei -y \
+    && apt-get install -y \
+        openssl \
+        net-tools \
+        git \
+        locales \
+        sudo \
+        dumb-init \
+        vim \
+        curl \
+        wget \
+    && apt-get upgrade -y && apt-get autoremove -y \
+    && apt-get clean -y && rm /var/lib/apt/lists/* -rf && rm /tmp/* -rf \
+    && adduser --gecos '' --disabled-password coder \
+    && echo "coder ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/nopasswd \
+    && TZ=Asia/Shanghai && LANG=C.UTF-8 && locale-gen zh_CN.UTF-8 \
+    && /usr/local/conda/bin/conda init bash && ln -s /usr/local/conda/.condarc ~/ \
+    && /usr/local/conda/bin/pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple \
+    && ln -s /usr/share/fonts/truetype/wqy/wqy-microhei.ttc /usr/local/conda/lib/python3.6/site-packages/matplotlib/mpl-data/fonts/ttf/
+
+USER coder
+
+COPY setup.sh /home/coder
+
+RUN mkdir -p /home/coder/project -p \
+    && mkdir -p /home/coder/.local/share/code-server -p \
+    && mkdir -p /home/coder/.vscode \
+    && /usr/local/conda/bin/conda init bash && ln -s /usr/local/conda/.condarc ~/ \
+    && /usr/local/conda/bin/pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple \
+    && sudo chmod a+x /home/coder/setup.sh && /home/coder/setup.sh && sudo rm /home/coder/setup.sh \
+    && sudo chown root:root /home/coder/entrypoint.sh
+
+COPY extensions /home/coder/.vscode
+WORKDIR /home/coder/project
+
+CMD ["bash", "/home/coder/entrypoint.sh"]
