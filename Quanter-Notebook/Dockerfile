@@ -28,7 +28,9 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     && TZ=Asia/Shanghai && LANG=zh_CN.UTF-8 && locale-gen zh_CN.UTF-8 && SHELL=/bin/bash \
     && adduser --gecos '' --disabled-password coder \
     && echo "coder ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/nopasswd \
-    && ln -s /usr/local/conda/bin/conda /usr/local/bin/ && ln -s /usr/local/conda/bin/pip /usr/local/bin/ && ln -s /usr/local/conda/bin/python /usr/local/bin/ \
+    && ln -s /usr/local/conda/bin/python /usr/local/bin/ \
+    && ln -s /usr/local/conda/bin/conda /usr/local/bin/ \
+    && ln -s /usr/local/conda/bin/pip /usr/local/bin/ \
     && conda init bash && ln -s /usr/local/conda/.condarc ~/ \
     && pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple \
     && ln -s /usr/share/fonts/truetype/wqy/wqy-microhei.ttc /usr/local/conda/lib/python3.6/site-packages/matplotlib/mpl-data/fonts/ttf/

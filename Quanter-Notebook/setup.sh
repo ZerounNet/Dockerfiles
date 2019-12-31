@@ -6,6 +6,7 @@ axes.unicode_minus  : False
 EOF
 
 cat > ~/entrypoint.sh <<EOF
+PATH="/usr/local/conda/bin:\$PATH"
 sudo pip install -U quantaxis qastrategy qifiaccount tqsdk tushare pytdx
 jupyter lab 
 EOF
