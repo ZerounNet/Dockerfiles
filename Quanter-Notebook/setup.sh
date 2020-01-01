@@ -8,14 +8,14 @@ EOF
 cat > ~/entrypoint.sh <<EOF
 PATH="/usr/local/conda/bin:\$PATH"
 sudo pip install -U quantaxis qastrategy qifiaccount tqsdk tushare pytdx
-jupyter lab 
+dumb-init jupyter lab 
 EOF
 chmod o+x ~/entrypoint.sh
 
 mkdir ~/.quantaxis/setting -p
 cat > ~/.quantaxis/setting/config.ini <<EOF
 [LOG]
-path = ~/.quantaxis/log
+path = /home/coder/.quantaxis/log
 EOF
 
 mkdir ~/.jupyter/
