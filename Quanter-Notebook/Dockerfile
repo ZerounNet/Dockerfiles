@@ -12,7 +12,7 @@ COPY --from=0 /usr/local/conda /usr/local/conda
 RUN export DEBIAN_FRONTEND=noninteractive \
     && sed -i 's/archive.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list \
     && sed -i 's/security.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list \
-    && apt-get update && apt-get install apt-utils tzdata fonts-wqy-microhei bash-completion -y \
+    && apt-get update && apt-get install apt-utils tzdata fonts-wqy-microhei bash-completion screen -y \
     && apt-get install -y \
         openssl \
         net-tools \
