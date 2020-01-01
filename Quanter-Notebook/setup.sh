@@ -15,7 +15,7 @@ chmod o+x ~/entrypoint.sh
 mkdir ~/.quantaxis/setting -p
 cat > ~/.quantaxis/setting/config.ini <<EOF
 [LOG]
-path = '~/.quantaxis/log'
+path = '/home/coder/.quantaxis/log'
 EOF
 
 mkdir ~/.jupyter/
