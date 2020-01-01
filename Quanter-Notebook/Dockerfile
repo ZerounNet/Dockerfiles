@@ -39,7 +39,7 @@ ENV TZ=Asia/Shanghai \
     LC_ALL=zh_CN.UTF-8 \
     LANG=zh_CN.UTF-8 \
     SHELL=/bin/bash \
-    TERM = xterm-256color
+    TERM=xterm-256color
     
 USER coder
 
