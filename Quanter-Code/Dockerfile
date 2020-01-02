@@ -8,6 +8,5 @@ USER coder
 COPY setup.sh /home/coder
 COPY extensions /home/coder/.local/share/code-server/extensions
 
-RUN sudo chown -R coder:coder /home/coder \
-    && chmod a+x /home/coder/setup.sh && /home/coder/setup.sh && rm /home/coder/setup.sh \
-    && sudo chown root:root /home/coder/entrypoint.sh 
+RUN sudo chown -R coder:coder /home/coder/.local \
+    && chmod a+x /home/coder/setup.sh && /home/coder/setup.sh && rm /home/coder/setup.sh
