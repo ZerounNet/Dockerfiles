@@ -9,4 +9,4 @@ COPY setup.sh /home/coder
 COPY extensions /home/coder/.local/share/code-server/extensions
 
 RUN sudo chown -R coder:coder /home/coder/.local \
-    && chmod a+x /home/coder/setup.sh && /home/coder/setup.sh && rm /home/coder/setup.sh
+    && sudo chmod a+x /home/coder/setup.sh && /home/coder/setup.sh && sudo rm /home/coder/setup.sh

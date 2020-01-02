@@ -32,7 +32,9 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     && echo "coder ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/nopasswd \
     && ln -s /usr/local/conda/bin/conda /usr/local/bin/ \
     && ln -s /usr/local/conda/bin/pip /usr/local/bin/ \
+    && ln -s /usr/local/conda/bin/python /usr/local/bin/ \
     && ln -s /usr/local/conda/.condarc ~/ \
+    && conda init bash \
     && pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple \
     && ln -s /usr/share/fonts/truetype/wqy/wqy-microhei.ttc /usr/local/conda/lib/python3.6/site-packages/matplotlib/mpl-data/fonts/ttf/
 
@@ -40,8 +42,7 @@ ENV TZ=Asia/Shanghai \
     LC_ALL=zh_CN.UTF-8 \
     LANG=zh_CN.UTF-8 \
     SHELL=/bin/bash \
-    TERM=xterm-256color \
-    PATH="/usr/local/conda/bin:/usr/local/conda/condabin:$PATH"
+    TERM=xterm-256color 
 
 USER coder
 
@@ -49,6 +50,7 @@ COPY setup.sh /home/coder
 
 RUN mkdir -p /home/coder/project \
     && ln -s /usr/local/conda/.condarc ~/ \
+    && conda init bash \
     && pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple \
     && sudo chown -R coder:coder /home/coder \
     && chmod a+x /home/coder/setup.sh && /home/coder/setup.sh && rm /home/coder/setup.sh \

@@ -6,6 +6,8 @@ axes.unicode_minus  : False
 EOF
 
 cat > ~/entrypoint.sh <<EOF
+sudo cp -f /etc/supervisor/supervisord.conf.bak /etc/supervisor/supervisord.conf
+echo "environment=TZ='\$TZ',LANG='\$LANG',PASSWORD='\$PASSWORD',MONGODB='\$MONGODB',QARUN='\$QARUN',QAPUBSUB_IP='\$QAPUBSUB_IP',QAPUBSUB_PORT='\$QAPUBSUB_PORT',QAPUBSUB_USER='\$QAPUBSUB_USER',QAPUBSUB_PWD='\$QAPUBSUB_PWD'" | sudo tee -a /etc/supervisor/supervisord.conf
 sudo pip install -U quantaxis qastrategy qifiaccount tqsdk tushare pytdx
 sudo dumb-init supervisord -n -c /etc/supervisor/supervisord.conf
 EOF
@@ -34,6 +36,29 @@ c.NotebookApp.allow_remote_access = True
 c.NotebookApp.tornado_settings = { 'headers': { 'Content-Security-Policy': "" }}
 EOF
 
+
+sudo tee /etc/supervisor/supervisord.conf.bak > /dev/null <<EOF
+[unix_http_server]
+file=/var/run/supervisor.sock
+chmod=0700
+
+[rpcinterface:supervisor]
+supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
+
+[supervisorctl]
+serverurl=unix:///var/run/supervisor.sock
+
+
+[include]
+files = /etc/supervisor/conf.d/*.conf
+
+[supervisord]
+logfile=/var/log/supervisor/supervisord.log
+pidfile=/var/run/supervisord.pid
+childlogdir=/var/log/supervisor
+EOF
+
+
 sudo tee /etc/supervisor/conf.d/nginx.conf > /dev/null <<EOF
 [program:nginx]
 command = dumb-init nginx -g 'daemon off;'
@@ -57,7 +82,7 @@ killasgroup=true
 EOF
 
 sudo tee /etc/nginx/passwd > /dev/null   <<EOF
-quanter:$apr1$YR4SFl7a$y0gG2hMKlu5P7yB6WayCD/
+quanter:\$apr1\$YR4SFl7a\$y0gG2hMKlu5P7yB6WayCD/
 EOF
 
 sudo tee /etc/nginx/sites-available/default > /dev/null   <<EOF
