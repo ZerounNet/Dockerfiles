@@ -12,7 +12,7 @@ COPY --from=0 /usr/local/conda /usr/local/conda
 RUN export DEBIAN_FRONTEND=noninteractive \
     && sed -i 's/archive.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list \
     && sed -i 's/security.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list \
-    && apt-get update && apt-get install apt-utils tzdata fonts-wqy-microhei bash-completion screen -y \
+    && apt-get update && apt-get install apt-utils tzdata fonts-wqy-microhei bash-completion screen supervisor nginx -y \
     && apt-get install -y \
         openssl \
         net-tools \
@@ -24,7 +24,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
         curl \
         wget \
     && apt-get upgrade -y && apt-get autoremove -y \
-    && apt-get clean -y && rm /var/lib/apt/lists/* -rf && rm /tmp/* -rf \
+    && apt-get clean -y && rm -rf /var/cache/apt/* && rm /var/lib/apt/lists/* -rf && rm /tmp/* -rf \
     && TZ=Asia/Shanghai && locale-gen zh_CN.UTF-8 \
     && adduser --gecos '' --disabled-password coder \
     && echo "coder ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/nopasswd \

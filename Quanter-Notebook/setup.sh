@@ -8,9 +8,9 @@ EOF
 cat > ~/entrypoint.sh <<EOF
 PATH="/usr/local/conda/bin:\$PATH"
 sudo pip install -U quantaxis qastrategy qifiaccount tqsdk tushare pytdx
-dumb-init jupyter lab 
+sudo dumb-init supervisord -n
 EOF
-chmod o+x ~/entrypoint.sh
+chmod a+x ~/entrypoint.sh
 
 mkdir ~/.quantaxis/setting -p
 cat > ~/.quantaxis/setting/config.ini <<EOF
@@ -34,3 +34,26 @@ c.NotebookApp.allow_origin = '*'
 c.NotebookApp.allow_remote_access = True
 c.NotebookApp.tornado_settings = { 'headers': { 'Content-Security-Policy': "" }}
 EOF
+
+sudo tee /etc/supervisor/conf.d/nginx.conf > /dev/null <<EOF
+[program:nginx]
+command = dumb-init nginx -g 'daemon off;'
+startsecs=0
+autostart=true
+autorestart=true
+stopasgroup=true
+killasgroup=true
+EOF
+
+sudo tee /etc/supervisor/conf.d/jupyter.conf > /dev/null <<EOF
+[program:jupyter]
+environment=PATH="/usr/local/conda/bin:\$PATH"
+command=dumb-init jupyter lab
+user=coder
+startsecs=0
+autostart=true
+autorestart=true
+stopasgroup=true
+killasgroup=true
+EOF
+

@@ -9,4 +9,4 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     && chmod u+x setup.sh && ./setup.sh && rm -rfv setup.sh \
     && apt-get install apt-utils tzdata -y \
     && apt-get upgrade -y && apt-get autoremove -y \
-    && apt-get clean -y && rm /var/lib/apt/lists/* -rf && rm /tmp/* -rf
+    && apt-get clean -y && rm -rf /var/cache/apt/* && rm /var/lib/apt/lists/* -rf && rm /tmp/* -rf
