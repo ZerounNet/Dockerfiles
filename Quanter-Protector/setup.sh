@@ -1,11 +1,65 @@
 cat > /entrypoint.sh <<EOF
+htpasswd -nb quanter \${PASSWORD:-'quanter'} > /etc/nginx/passwd
 dumb-init nginx -g 'daemon off;'
 EOF
 chmod a+x /entrypoint.sh
 
-tee /etc/nginx/passwd > /dev/null   <<EOF
-quanter:\$apr1\$YR4SFl7a\$y0gG2hMKlu5P7yB6WayCD/
+tee /etc/nginx/sites-available/qarun > /dev/null   <<EOF
+server {
+        listen 8010;
+        location / {
+            proxy_set_header Host \$host;
+            proxy_set_header X-Real-Scheme \$scheme;
+            proxy_set_header X-Real-IP \$remote_addr;
+            proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+            proxy_pass  http://qarun:8010;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade \$http_upgrade;
+            proxy_set_header Connection "upgrade";
+            proxy_read_timeout 120s;
+            proxy_next_upstream error;
+        }
+}
 EOF
+ln -s /etc/nginx/sites-available/qarun /etc/nginx/sites-enabled
+
+tee /etc/nginx/sites-available/qamarketcollector > /dev/null   <<EOF
+server {
+        listen 8011;
+        location / {
+            proxy_set_header Host \$host;
+            proxy_set_header X-Real-Scheme \$scheme;
+            proxy_set_header X-Real-IP \$remote_addr;
+            proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+            proxy_pass  http://qamarketcollector:8011;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade \$http_upgrade;
+            proxy_set_header Connection "upgrade";
+            proxy_read_timeout 120s;
+            proxy_next_upstream error;
+        }
+}
+EOF
+ln -s /etc/nginx/sites-available/qamarketcollector /etc/nginx/sites-enabled
+
+tee /etc/nginx/sites-available/qatrader > /dev/null   <<EOF
+server {
+        listen 8020;
+        location / {
+            proxy_set_header Host \$host;
+            proxy_set_header X-Real-Scheme \$scheme;
+            proxy_set_header X-Real-IP \$remote_addr;
+            proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+            proxy_pass  http://qatrader:8020;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade \$http_upgrade;
+            proxy_set_header Connection "upgrade";
+            proxy_read_timeout 120s;
+            proxy_next_upstream error;
+        }
+}
+EOF
+ln -s /etc/nginx/sites-available/qatrader /etc/nginx/sites-enabled
 
 tee /etc/nginx/sites-available/code > /dev/null   <<EOF
 server {
