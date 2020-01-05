@@ -12,7 +12,7 @@ COPY --from=0 /usr/local/conda /usr/local/conda
 RUN export DEBIAN_FRONTEND=noninteractive \
     && sed -i 's/archive.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list \
     && sed -i 's/security.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list \
-    && apt-get update && apt-get install apt-utils tzdata fonts-wqy-microhei bash-completion screen supervisor nginx -y \
+    && apt-get update && apt-get install apt-utils tzdata fonts-wqy-microhei bash-completion screen supervisor -y \
     && apt-get install -y \
         openssl \
         net-tools \
@@ -26,8 +26,6 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     && apt-get upgrade -y && apt-get autoremove -y \
     && apt-get clean -y && rm -rf /var/cache/apt/* && rm /var/lib/apt/lists/* -rf && rm /tmp/* -rf \
     && locale-gen zh_CN.UTF-8 \
-    && rm /var/www/html/* -rf \
-    && git clone https://gitee.com/yutiansut/QADESK_BASIC /var/www/html \
     && adduser --gecos '' --disabled-password coder \
     && echo "coder ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/nopasswd \
     && ln -s /usr/local/conda/bin/conda /usr/local/bin/ \

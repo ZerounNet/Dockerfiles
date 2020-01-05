@@ -23,8 +23,8 @@ mkdir ~/.jupyter/
 cat > ~/.jupyter/jupyter_notebook_config.py <<EOF
 import os
 from IPython.lib import passwd
-c.NotebookApp.ip = '127.0.0.1'
-c.NotebookApp.port = 8889
+c.NotebookApp.ip = '0.0.0.0'
+c.NotebookApp.port = 8888
 c.NotebookApp.notebook_dir = '/home/coder/project'
 c.NotebookApp.open_browser = False
 c.MultiKernelManager.default_kernel_name = 'python3'
@@ -58,17 +58,6 @@ pidfile=/var/run/supervisord.pid
 childlogdir=/var/log/supervisor
 EOF
 
-
-sudo tee /etc/supervisor/conf.d/nginx.conf > /dev/null <<EOF
-[program:nginx]
-command = dumb-init nginx -g 'daemon off;'
-startsecs=0
-autostart=true
-autorestart=true
-stopasgroup=true
-killasgroup=true
-EOF
-
 sudo tee /etc/supervisor/conf.d/jupyter.conf > /dev/null <<EOF
 [program:jupyter]
 #environment=PATH="/usr/local/conda/bin:/usr/local/conda/condabin:%(ENV_PATH)s"
@@ -80,38 +69,3 @@ autorestart=true
 stopasgroup=true
 killasgroup=true
 EOF
-
-sudo tee /etc/nginx/passwd > /dev/null   <<EOF
-quanter:\$apr1\$YR4SFl7a\$y0gG2hMKlu5P7yB6WayCD/
-EOF
-
-sudo tee /etc/nginx/sites-available/default > /dev/null   <<EOF
-server {
-        listen 80 default_server;
-        root /var/www/html;
-        auth_basic "who are you";
-        auth_basic_user_file /etc/nginx/passwd;
-        index index.html index.htm;
-        server_name _;
-}
-EOF
-sudo tee /etc/nginx/sites-available/jupyter > /dev/null   <<EOF
-server {
-        listen 8888;
-        auth_basic "who are you";
-        auth_basic_user_file /etc/nginx/passwd;
-        location / {
-            proxy_set_header Host \$host;
-            proxy_set_header X-Real-Scheme \$scheme;
-            proxy_set_header X-Real-IP \$remote_addr;
-            proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-            proxy_pass  http://127.0.0.1:8889;
-            proxy_http_version 1.1;
-            proxy_set_header Upgrade \$http_upgrade;
-            proxy_set_header Connection "upgrade";
-            proxy_read_timeout 120s;
-            proxy_next_upstream error;
-        }
-}
-EOF
-sudo ln -s /etc/nginx/sites-available/jupyter /etc/nginx/sites-enabled
