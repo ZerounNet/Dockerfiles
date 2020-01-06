@@ -7,7 +7,7 @@ EOF
 
 cat > ~/entrypoint.sh <<EOF
 sudo cp -f /etc/supervisor/supervisord.conf.bak /etc/supervisor/supervisord.conf
-echo "environment=TZ='\$TZ',LANG='\$LANG',PASSWORD='\$PASSWORD',MONGODB='\$MONGODB',QARUN='\$QARUN',QAPUBSUB_IP='\$QAPUBSUB_IP',QAPUBSUB_PORT='\$QAPUBSUB_PORT',QAPUBSUB_USER='\$QAPUBSUB_USER',QAPUBSUB_PWD='\$QAPUBSUB_PWD'" | sudo tee -a /etc/supervisor/supervisord.conf
+echo "environment=TZ='\$TZ',LANG='\$LANG',PASSWORD='\${PASSWORD:-'quanter'}',MONGODB='\$MONGODB',QARUN='\$QARUN',QAPUBSUB_IP='\$QAPUBSUB_IP',QAPUBSUB_PORT='\$QAPUBSUB_PORT',QAPUBSUB_USER='\$QAPUBSUB_USER',QAPUBSUB_PWD='\$QAPUBSUB_PWD'" | sudo tee -a /etc/supervisor/supervisord.conf
 sudo pip install -U quantaxis qastrategy qifiaccount tqsdk tushare pytdx
 sudo dumb-init supervisord -n -c /etc/supervisor/supervisord.conf
 EOF
