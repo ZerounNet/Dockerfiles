@@ -1,0 +1,147 @@
+version: '3'
+services:
+    mgdb:
+        image: mongo:4.1.3
+        container_name: mgdb
+        networks:
+            quanter:
+                ipv4_address: 192.168.100.2
+        #ports:
+        #    - "27017:27017"
+        env_file: quanter.env
+        volumes:
+            - /home/docker/Mount/quantaxis/mgdb:/data/db
+        restart: always
+    qaeventmq:
+        image: rabbitmq:management
+        container_name: qaeventmq
+        networks:
+            quanter:
+                ipv4_address: 192.168.100.3
+        #ports:
+        #    - "15672:15672"
+        #    - "5672:5672"
+        #    - "4369:4369"
+        env_file: quanter.env
+        restart: always
+    qarun:
+        image: daocloud.io/quantaxis/qarun:latest
+        container_name: qarun
+        networks:
+            quanter:
+                ipv4_address: 192.168.100.4
+        #ports:
+        #    - "8010:8010"
+        depends_on:
+            - mgdb
+            - qaeventmq
+        env_file: quanter.env
+        command: ['/root/wait_for_it.sh', 'qaeventmq:5672', '--' , "/root/runcelery.sh"]
+        restart: always
+    qamarketcollector:
+        image: daocloud.io/quantaxis/qarealtimecollector:latest
+        container_name: qamarketcollector
+        networks:
+            quanter:
+                ipv4_address: 192.168.100.5
+        #ports:
+        #    - "8011:8011"
+        depends_on:
+            - mgdb
+            - qaeventmq
+            - qarun
+        env_file: quanter.env
+        command:
+            ['/root/QUANTAXIS_RealtimeCollector/docker/wait_for_it.sh', 'qaeventmq:5672', '--' ,'/root/QUANTAXIS_RealtimeCollector/docker/start_collector.sh']
+        restart: always
+    qatrader:
+        image: daocloud.io/quantaxis/qatrader:latest
+        container_name: qatrader
+        networks:
+            quanter:
+                ipv4_address: 192.168.100.6
+        #ports:
+        #    - "8020:8020"
+        depends_on:
+            - mgdb
+            - qaeventmq
+        env_file: quanter.env
+        command:
+            ['/root/QATrader/docker/wait_for_it.sh', 'qaeventmq:5672', '--' ,'qatraderserver']
+        restart: always
+    qacommunity:
+        image: zerounnet/quanter-code:latest  #vscode模式,tq和qa可用
+        #image: zerounnet/quanter-notebook:latest  #notebook模式,qa可用
+        container_name: qacommunity
+        networks:
+            quanter:
+                ipv4_address: 192.168.100.7
+        #ports:
+        #    - "3000:3000"
+        #    - "8888:8888"
+        #    - "20080:80"
+        volumes:
+            - /home/docker/Mount/quantaxis/code:/home/coder/project
+        depends_on:
+            - mgdb
+            - qaeventmq
+            - qarun
+        env_file: quanter.env
+        restart: always
+    qasamba:
+        image: joebiellik/samba-server
+        container_name: qasamba
+        networks:
+            quanter:
+                ipv4_address: 192.168.100.8
+        volumes:
+            - /home/docker/Mount/quantaxis/code:/mnt/project
+            - /home/docker/Mount/samba/smb.conf:/etc/samba/smb.conf
+        env_file: quanter.env
+        environment:
+            - USERNAME=quanter
+        restart: always
+    #puppet:
+        #ports:
+        #    - "8888:8888"
+        #networks:
+        #    quanter:
+        #        ipv4_address: 192.168.100.9
+    protector:
+        image: zerounnet/quanter-protector:latest
+        container_name: protector
+        networks:
+            quanter:
+                ipv4_address: 192.168.100.10
+        ports:
+            - "8010:8010"
+            - "8011:8011"
+            - "8020:8020"
+            - "8887:8887"
+            - "8888:8888"
+            - "8889:8889"
+            - "9000:9000"
+        depends_on:
+            - qarun
+            - qamarketcollector
+            - qatrader
+            - qacommunity
+        extra_hosts:
+            - "puppet:192.168.100.9"
+        env_file: quanter.env
+        restart: always
+    qactpbeebroker:
+        image: daocloud.io/quantaxis/qactpbeebroker:latest
+        container_name: qactpbeebroker
+        networks:
+            quanter:
+                ipv4_address: 192.168.100.11
+        depends_on:
+            - qamarketcollector
+        env_file: quanter.env
+        command: ['/root/wait_for_it.sh', 'qaeventmq:15672', '--' , "QACTPBEE", "--userid", "请输入你的www.simnow.com.cn账号", "--password", '请输入你的www.simnow.com.cn密码']
+        restart: always
+networks:
+    quanter:
+        external:
+           name: docker-kvm
