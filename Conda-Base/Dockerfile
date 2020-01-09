@@ -9,16 +9,16 @@ ENV TZ=Asia/Shanghai \
     TERM=xterm-256color
 
 RUN export DEBIAN_FRONTEND=noninteractive \
+    && sed -i 's/archive.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list \
+    && sed -i 's/security.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list \
+    && apt-get update  && apt-get install wget apt-utils tzdata locales -y \
     && wget https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-Linux-x86_64.sh \
-    && bash /Miniconda3-latest-Linux-x86_64.sh -b -p /usr/local/conda \
+    && bash /Miniconda3-latest-Linux-x86_64.sh -u -b -p /usr/local/conda \
     && rm /Miniconda3-latest-Linux-x86_64.sh \
     && ln -s /usr/local/conda/.condarc  /root \
     && conda install -n base python==3.6.9 -y \
     && conda update -n base conda -y \
     && pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple \
-    && sed -i 's/archive.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list \
-    && sed -i 's/security.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list  \
-    && apt-get update  && apt-get install wget apt-utils tzdata locales -y \
     && locale-gen zh_CN.UTF-8 \
     && conda clean -a -y && rm /root/.cache/ -rf  \
     && apt-get clean -y && rm -rf /var/cache/apt/* && rm /var/lib/apt/lists/* -rf && rm /tmp/* -rf
