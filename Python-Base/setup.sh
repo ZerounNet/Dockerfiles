@@ -1,4 +1,4 @@
-apt-get install wget -y
+apt-get install wget gcc -y
 
 wget https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-Linux-x86_64.sh
 chmod u+x Miniconda3-latest-Linux-x86_64.sh
