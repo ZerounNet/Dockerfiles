@@ -1,5 +1,5 @@
 cat > /entrypoint.sh <<EOF
-htpasswd -nb quanter \${PASSWORD:-'quanter'} > /etc/nginx/passwd
+htpasswd -nb quanter \${PASSWORD:"quanter"} > /etc/nginx/passwd
 dumb-init nginx -g 'daemon off;'
 EOF
 chmod a+x /entrypoint.sh
