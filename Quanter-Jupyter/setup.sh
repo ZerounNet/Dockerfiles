@@ -6,9 +6,9 @@ axes.unicode_minus  : False
 EOF
 
 tee  ~/entrypoint.sh > /dev/null <<EOF
-sudo cp -f /etc/supervisor/supervisord.conf.bak /etc/supervisor/supervisord.conf
-echo "environment=TZ='\$TZ',LANG='\$LANG',MONGODB='\$MONGODB',EventMQ_IP='\${EventMQ_IP:-"qaeventmq"}',QARUN='\$QARUN',QAPUBSUB_IP='\$QAPUBSUB_IP',QAPUBSUB_PORT='\$QAPUBSUB_PORT',QAPUBSUB_USER='\$QAPUBSUB_USER',QAPUBSUB_PWD='\$QAPUBSUB_PWD',PASSWORD='\${PASSWORD:"quanter"}',WXID='\$WXID'" | sudo tee -a /etc/supervisor/supervisord.conf
 sudo pip install -U quantaxis qastrategy qifiaccount tqsdk tushare pytdx
+sudo cp -f /etc/supervisor/supervisord.conf.bak /etc/supervisor/supervisord.conf
+echo "environment=TZ='\$TZ',LANG='\$LANG',MONGODB='\$MONGODB',EventMQ_IP='\$EventMQ_IP',QARUN='\$QARUN',QAPUBSUB_IP='\$QAPUBSUB_IP',QAPUBSUB_PORT='\$QAPUBSUB_PORT',QAPUBSUB_USER='\$QAPUBSUB_USER',QAPUBSUB_PWD='\$QAPUBSUB_PWD',PASSWORD='\$PASSWORD',WXID='\$WXID'" | sudo tee -a /etc/supervisor/supervisord.conf
 sudo dumb-init supervisord -n -c /etc/supervisor/supervisord.conf
 EOF
 
