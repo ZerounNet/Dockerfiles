@@ -1,12 +1,9 @@
 FROM codercom/code-server:v2
-FROM zerounnet/quanter-notebook:latest
+FROM zerounnet/quanter-jupyter:latest
 
 COPY --from=0 /usr/local/bin/code-server /usr/local/bin/code-server
+COPY setup.sh /home/quanter
+COPY extensions /home/quanter/.local/share/code-server/extensions
 
-USER coder
-
-COPY setup.sh /home/coder
-COPY extensions /home/coder/.local/share/code-server/extensions
-
-RUN sudo chown -R coder:coder /home/coder/.local \
-    && sudo chmod a+x /home/coder/setup.sh && /home/coder/setup.sh && sudo rm /home/coder/setup.sh
+RUN sudo chown -R quanter:quanter /home/quanter/.local \
+    && sudo chmod a+x /home/quanter/setup.sh && /home/quanter/setup.sh && sudo rm /home/quanter/setup.sh

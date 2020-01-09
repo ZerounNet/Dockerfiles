@@ -1,19 +1,18 @@
-cat > ~/.local/share/code-server/coder.json <<EOF
-{"lastVisited":{"path":"/home/coder/project","workspace":false}}
+tee ~/.local/share/code-server/coder.json > /dev/null <<EOF
+{"lastVisited":{"path":"/home/quanter/project","workspace":false}}
 EOF
 
 mkdir ~/project/.vscode -p
-cat > ~/project/.vscode/settings.json <<EOF
+tee ~/project/.vscode/settings.json > /dev/null <<EOF
 {
-    "python.pythonPath": "/usr/local/bin/python"
+    "python.pythonPath": "/project/.vscode/settings.json"
 }
 EOF
 
 sudo tee /etc/supervisor/conf.d/code.conf > /dev/null <<EOF
 [program:code]
-#environment=PATH="/usr/local/conda/bin:/usr/local/conda/condabin:%(ENV_PATH)s"
 command=dumb-init code-server --host=0.0.0.0 --port=8887 --auth=none
-user=coder
+user=quanter
 startsecs=0
 autostart=true
 autorestart=true
