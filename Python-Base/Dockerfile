@@ -10,7 +10,6 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     && ln -s /usr/local/conda/bin/conda /usr/local/bin/ \
     && ln -s /usr/local/conda/bin/pip /usr/local/bin/ \
     && ln -s /usr/local/conda/bin/python /usr/local/bin/ \
-    && ln -s /usr/local/conda/.condarc ~/ \
     && conda init bash \
     && pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple \
     && apt-get install apt-utils tzdata -y \

@@ -3,7 +3,7 @@ docker run -it --rm -e LANG=C.UTF-8 -e MONGODB=192.168.100.2 -e EventMQ_IP=192.1
 
 
 拉起镜像
-docker run -it --rm -e LANG=C.UTF-8 -e MONGODB=192.168.100.2 -e EventMQ_IP=192.168.100.3 zerounnet/quanter-base:latest bash bash
+docker run -it --rm -e LANG=C.UTF-8 -e MONGODB=192.168.100.2 -e EventMQ_IP=192.168.100.3 zerounnet/python-base:latest bash
 
 镜像内运行：
 sed -i 's/archive.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list
