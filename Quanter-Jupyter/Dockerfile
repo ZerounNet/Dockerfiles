@@ -4,7 +4,6 @@ RUN apt-get update && apt-get install -y fonts-wqy-microhei bash-completion scre
     && adduser --gecos '' --disabled-password quanter \
     && echo "quanter ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/nopasswd \
     && sed -i 's/secure_path=\"/secure_path=\"\/usr\/local\/conda\/bin:\/usr\/local\/conda\/condabin:/g' /etc/sudoers \
-    && echo "PATH=\"$PATH\"" > /etc/environment \
     && ln -s /usr/share/fonts/truetype/wqy/wqy-microhei.ttc /usr/local/conda/lib/python3.6/site-packages/matplotlib/mpl-data/fonts/ttf/ \
     && conda clean -a -y && rm /root/.cache/ -rf  \
     && apt-get clean -y && rm -rf /var/cache/apt/* && rm /var/lib/apt/lists/* -rf && rm /tmp/* -rf

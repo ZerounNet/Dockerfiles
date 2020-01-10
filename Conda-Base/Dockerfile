@@ -16,6 +16,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     && bash /Miniconda3-latest-Linux-x86_64.sh -u -b -p /usr/local/conda \
     && rm /Miniconda3-latest-Linux-x86_64.sh \
     && ln -s /usr/local/conda/.condarc  /root \
+    && echo "PATH=\"$PATH\"" > /etc/environment \
     && conda install -n base python==3.6.9 -y \
     && conda update -n base conda -y \
     && pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple \
