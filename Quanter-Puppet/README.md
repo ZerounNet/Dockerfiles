@@ -6,7 +6,7 @@
 1) Linux操作系统，包括但不仅限于Ubuntu、CentOS。
 2) 完成KVM的安装，准备好win7/win10操作系统ISO。
 3) 完成Docker的安装，并安装docker-compose支持。
-4) 完成git的安装
+4) 完成Git的安装
 # 部署过程
 ## 实体机
 * 为docker和kvm的建立网络链接
