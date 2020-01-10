@@ -1,3 +1,4 @@
+#docker network create --driver=bridge --subnet=192.168.100.0/24 docker-kvm
 version: '3'
 services:
     mgdb:
@@ -39,7 +40,7 @@ services:
         command: ['/root/wait_for_it.sh', 'qaeventmq:5672', '--' , "/root/runcelery.sh"]
         restart: always
     qamarketcollector:
-        image: daocloud.io/quantaxis/qarealtimecollector:latest
+        image: zerounnet/quanter-realtimecollector:latest
         container_name: qamarketcollector
         networks:
             quanter:
@@ -51,8 +52,7 @@ services:
             - qaeventmq
             - qarun
         env_file: quanter.env
-        command:
-            ['/root/QUANTAXIS_RealtimeCollector/docker/wait_for_it.sh', 'qaeventmq:5672', '--' ,'/root/QUANTAXIS_RealtimeCollector/docker/start_collector.sh']
+        command: ['/wait_for_it.sh', 'qaeventmq:5672', '--' ,'/entrypoint.sh']
         restart: always
     qatrader:
         image: daocloud.io/quantaxis/qatrader:latest
@@ -81,7 +81,7 @@ services:
         #    - "8888:8888"
         #    - "20080:80"
         volumes:
-            - /home/docker/Mount/quantaxis/code:/home/coder/project
+            - /home/docker/Mount/quantaxis/code:/home/quanter/project
         depends_on:
             - mgdb
             - qaeventmq
