@@ -19,4 +19,8 @@ sudo mkdir -p /home/docker/Mount/quantaxis/code
 sudo mkdir -p /home/docker/Mount/quantaxis/mgdb
 sudo mkdir -p /home/docker/Mount/samba
 ```
+* 启动docker-compose 
+```
+docker-compose -d
+```
 未完待续...
