@@ -13,10 +13,10 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     && apt-get install -y php-dev libmcrypt-dev php-pear \
     && pecl channel-update pecl.php.net \
     && echo "\n" | pecl install mcrypt \
-    && echo "y\ny\ny\ny" | pecl install swoole \
     && echo 'extension=mcrypt.so' > /etc/php/7.2/mods-available/mcrypt.ini \
     && ln -s /etc/php/7.2/mods-available/mcrypt.ini /etc/php/7.2/cli/conf.d/20-mcrypt.ini \
     && ln -s /etc/php/7.2/mods-available/mcrypt.ini /etc/php/7.2/fpm/conf.d/20-mcrypt.ini \
+    && echo "y\ny\ny\ny" | pecl install swoole \
     && echo 'extension=swoole.so' > /etc/php/7.2/mods-available/swoole.ini \
     && ln -s /etc/php/7.2/mods-available/swoole.ini /etc/php/7.2/cli/conf.d/20-swoole.ini \
     && locale-gen zh_CN.UTF-8 \
