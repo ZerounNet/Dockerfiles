@@ -61,7 +61,7 @@ pm.start_servers = 25
 pm.min_spare_servers = 10
 pm.max_spare_servers = 30
 pm.max_requests = 3000
-slowlog = log/$pool.log.slow
+slowlog = /var/log/php7.2-fpm.slow.log
 request_slowlog_timeout = 5
 request_terminate_timeout = 100
 EOF
