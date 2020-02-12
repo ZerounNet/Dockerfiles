@@ -37,6 +37,17 @@ EOF
 
 
 
+tee /etc/php/7.2/fpm/php-fpm.conf > /dev/null <<EOF
+[global]
+pid = /run/php/php7.2-fpm.pid
+error_log = /var/log/php7.2-fpm.log
+emergency_restart_threshold = 60
+emergency_restart_interval = 1m
+include=/etc/php/7.2/fpm/pool.d/*.conf
+EOF
+
+
+
 tee /etc/php/7.2/fpm/pool.d/www.conf > /dev/null <<EOF
 [www]
 user = www-data
@@ -45,8 +56,12 @@ listen = 0.0.0.0:9000
 listen.owner = www-data
 listen.group = www-data
 pm = dynamic
-pm.max_children = 5
-pm.start_servers = 2
-pm.min_spare_servers = 1
-pm.max_spare_servers = 3
+pm.max_children = 80
+pm.start_servers = 25
+pm.min_spare_servers = 10
+pm.max_spare_servers = 30
+pm.max_requests = 3000
+slowlog = log/$pool.log.slow
+request_slowlog_timeout = 5
+request_terminate_timeout = 100
 EOF
